@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Deck.Models;
+using Deck.Services;
 
 namespace Deck
 {
@@ -25,8 +26,8 @@ namespace Deck
             //parse args... specifically the first operation
             var nextOp = parseArgs(args);
 
-            //spin up a deck!
-            var deck = new DeckOfCards();
+            //spin up a Dealer!
+            var dealer = new Dealer();
 
             //stay alive 'till otherwise instructed
             while(true)
@@ -35,10 +36,11 @@ namespace Deck
                 switch (nextOp)
                 {
                     case Operation.Shuffle:
-                        shuffleDeck(deck);
+                        Console.WriteLine("\nShuffling deck...\n");
+                        dealer.Shuffle();
                         break;
                     case Operation.Deal:
-                        var card = deck.DealOneCard();
+                        var card = dealer.DealOneCard();
                         dealCard(card);
                         break;
                     case Operation.Exit:
@@ -89,17 +91,11 @@ namespace Deck
         #endregion
         
         #region operations
-        private static void shuffleDeck(DeckOfCards deck)
-        {
-            Console.WriteLine("\nShuffling deck...\n");
-            deck.Shuffle();
-        }
-
         private static void dealCard(Card card)
         {
             if (card == null)
             {
-                Console.WriteLine("\nNo cards left cowboy!\n");
+                Console.WriteLine("\nNo cards left pardner!\n");
                 return;
             }
 

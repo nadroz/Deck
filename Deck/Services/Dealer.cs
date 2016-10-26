@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Deck.Models;
 
-namespace Deck.Models
+namespace Deck.Services
 {
-    public sealed class DeckOfCards
+    public sealed class Dealer
     {
         private readonly Random rand;
-        private Queue<Card> cards;
+        private Queue<Card> deck;
 
-        public DeckOfCards()
+        public Dealer()
         {
-            this.cards = populateDeck();
+            this.deck = populateDeck();
             rand = new Random();
         }
 
         public void Shuffle()
         {
-            var cardsArray = cards.ToArray();
+            var cardsArray = deck.ToArray();
             var len = cardsArray.Length;
 
             //if there are one or fewer cards, bounce
@@ -38,12 +39,12 @@ namespace Deck.Models
             }
             
             //put 'em back where you found 'em
-            cards = new Queue<Card>(cardsArray);
+            deck = new Queue<Card>(cardsArray);
         }
 
         public Card DealOneCard()
         {   
-            var len = cards.Count();
+            var len = deck.Count();
             
             //if there are no cards left, return null
             if(len == 0)
@@ -52,7 +53,7 @@ namespace Deck.Models
             }
 
             //deal one off the top
-            return cards.Dequeue();
+            return deck.Dequeue();
         }
 
         private Queue<Card> populateDeck()

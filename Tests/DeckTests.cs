@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Deck.Models;
+using Deck.Services;
 using Xunit;
 using System.Reflection;
 
@@ -14,24 +15,25 @@ namespace Deck.Tests
         [Fact]
         public void TestShuffle()
         {
-            var deck = new DeckOfCards();
+            var dealer = new Dealer();
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-            FieldInfo field = typeof(DeckOfCards).GetField("cards", bindFlags);
+            FieldInfo field = typeof(Dealer).GetField("deck", bindFlags);
             
             //get the cards in their original order
-            var unshuffled = (IEnumerable<Card>)field.GetValue(deck);
+            var unshuffled = (IEnumerable<Card>)field.GetValue(dealer);
             
             //shuffle the deck
-            deck.Shuffle();
+            dealer.Shuffle();
 
             //get the cards in their new, shuffled order
-            var shuffled = (IEnumerable<Card>)field.GetValue(deck);
+            var shuffled = (IEnumerable<Card>)field.GetValue(dealer);
 
             var unshuffledArray = unshuffled.ToArray();
             var shuffledArray = shuffled.ToArray();
 
             //make sure we're dealing with full decks
-            Assert.Equal(unshuffledArray.Length, shuffledArray.Length);
+            Assert.Equal(unshuffledArray.Length, 52);
+            Assert.Equal(shuffledArray.Length, 52);
 
             for (int i = shuffledArray.Length - 1; i > 0; i--)
             {
@@ -48,9 +50,9 @@ namespace Deck.Tests
         [Fact]
         public void TestDeal()
         {
-            var deck = new DeckOfCards();
+            var deck = new Dealer();
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-            FieldInfo field = typeof(DeckOfCards).GetField("cards", bindFlags);
+            FieldInfo field = typeof(Dealer).GetField("deck", bindFlags);
 
             //get the card count
             var cards = (IEnumerable<Card>)field.GetValue(deck);
